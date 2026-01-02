@@ -1,0 +1,166 @@
+{
+  "env": {
+    "EDITOR": "code --wait",
+    "CLAUDE_CODE_COMMIT_AUTHOR": "Claude AI <claude@anthropic.com>",
+    "TERM": "xterm-256color",
+    "COLORTERM": "truecolor",
+    "PYTHONIOENCODING": "utf-8",
+    "BASH_DEFAULT_TIMEOUT_MS": "120000",
+    "BASH_MAX_TIMEOUT_MS": "600000"
+  },
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "MultiEdit",
+      "NotebookEdit",
+      "WebFetch",
+      "WebSearch",
+      "TodoRead",
+      "TodoWrite",
+      "Bash",
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(git:*)",
+      "Bash(npm:*)",
+      "Bash(pnpm:*)",
+      "Bash(yarn:*)",
+      "Bash(python:*)",
+      "Bash(pytest:*)",
+      "Bash(pip:*)",
+      "Bash(uv:*)",
+      "Bash(gh:*)",
+      "Bash(code:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(cd:*)",
+      "Bash(pwd:*)",
+      "Bash(cat:*)",
+      "Bash(touch:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./**/credentials*)",
+      "Read(./**/*secret*)",
+      "Read(./**/*password*)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(format:*)",
+      "Bash(del /s /q:*)"
+    ],
+    "additionalDirectories": []
+  },
+  "model": "claude-sonnet-4-5-20250929",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"%USERPROFILE%\\.claude\\hooks\\session-initializer.py\"",
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "echo Success",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"%USERPROFILE%\\.claude\\hooks\\prompt-context-injector.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"%USERPROFILE%\\.claude\\hooks\\bash-safety-gate.py\"",
+            "timeout": 8
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"%USERPROFILE%\\.claude\\hooks\\git-safety-net.py\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"%USERPROFILE%\\.claude\\hooks\\post-edit-format.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "auto|manual",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"%USERPROFILE%\\.claude\\hooks\\context-compression-guard.py\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"%USERPROFILE%\\.claude\\hooks\\quality-gate.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"%USERPROFILE%\\.claude\\hooks\\session-archiver.py\"",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true,
+    "superpowers-developing-for-claude-code@superpowers-marketplace": true,
+    "superpowers-chrome@superpowers-marketplace": true,
+    "greptile@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "clangd-lsp@claude-plugins-official": true
+  }
+}

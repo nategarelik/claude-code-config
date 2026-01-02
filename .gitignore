@@ -1,0 +1,61 @@
+# Claude Code Configuration .gitignore
+
+# Logs and temporary files
+hooks/logs/
+*.log
+
+# Session data and memory
+memory-bank/
+todos/
+sessions/
+
+# Backups
+backup-*/
+*.backup
+
+# Environment and secrets
+.env
+.env.*
+secrets/
+.credentials.json
+**/credentials*
+**/*secret*
+**/*password*
+*.pem
+*.key
+id_rsa*
+
+# Plugins (large, auto-downloaded)
+plugins/
+
+# Internal Claude Code files
+debug/
+file-history/
+history.jsonl
+shell-snapshots/
+stats-cache.json
+statsig/
+specialist-agents/
+remote-setup/
+projects/
+
+# Optimized/temporary files
+*.optimized
+nul
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
